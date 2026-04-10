@@ -1,19 +1,17 @@
 <script setup>
 const props= defineProps({
-  tovar:Object,
+  itemArray:Object,
 })
-const emit = defineEmits(['add','del'])
-const addTovar = ()=>{
-  emit ('add',props.tovar)
+const emit = defineEmits(['add'])
+const addItem = ()=>{
+  emit ('add',props.itemArray)
 }
-const delTovar = () =>{
-  emit('del',props.tovar)
-}
+
 </script>
 <template>
   <div>
 
-    <button class="buttonMax" @click="addTovar" > {{ tovar.name }}</button>
+    <button class="buttonMax" @click="addItem" > {{itemArray.name }}</button>
   </div>
   <div>
 

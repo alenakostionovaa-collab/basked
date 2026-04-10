@@ -1,28 +1,42 @@
 <script setup>
 import { storeCart } from './cart';
 const store =  storeCart()
-import child from './basket.vue';
-import { ref } from 'vue'
-const tovar = ([
-  {id:1, name:'tovar1',count:1,price:1231},
-  {id:2, name:'tovar2',count:1,price:1231},
-  {id:3, name:'tovar3',count:1,price:1231},
+import inputComponent from './input.vue';
+
+
+import { ref,computed } from 'vue'
+import Basket from './basket.vue';
+const model = ref('')
+const productArray = ([
+  {id:1, name:'tovar1',count:1,price:1231,category:'product'},
+  {id:2, name:'tovar2',count:1,price:1231,category:'fruit'},
+  {id:3, name:'tovar3',count:1,price:1231,category:'vegetable'},
 ])
 
+    const inputSearch = computed(()=>{
+          return productArray.filter(item =>
+            item.name.toLowerCase().includes((model.value || '').toLowerCase())
+  )
+    })
 </script>
 
 <template>
+  <div>
+   <inputComponent v-model="model"  />
+  </div>
+
   <div class="flex">
+
       <div class="marginCard">
-        <child @add="store.addItem"
-        @del="store.removeItem" v-for="item in tovar" :key="item.id"
-        :tovar="item" />
+        <basket @add="store.addItem"
+        @del="store.removeItem" v-for="item in inputSearch" :key="item.id"
+        :itemArray="item" />
 
       </div>
 
       <div class="basked">Корзина
-        <div v-for="item in store.newMass" :key="item.id"
-        :tovar="item" > {{ item.name }}{{ item.count }}{{ item.price }}
+        <div v-for="item in store.baskedArr" :key="item.id"
+        :itemArray="item" > {{ item.name }}{{ item.count }}{{ item.price }}
 
         {{ item.count }}
         <button class="buttonMin" @click="store.removeItem(item)">-</button>
@@ -31,9 +45,6 @@ const tovar = ([
       </div>
       <div class="lineCenter">
           <div class="solid"></div>
-
-
-
       </div>
       <span>Итого:</span>{{ store.newSum }}$
 
